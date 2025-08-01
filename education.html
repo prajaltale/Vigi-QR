@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VigiQR - Educational Tips</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="index.html">VigiQR</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('education') }}">Educational Tips</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container page-transition">
+        <div class="page-header">
+            <h1>Educational Tips</h1>
+            <p class="subtitle">Learn How to Protect Yourself from QR Code Phishing</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="main-card educational-card">
+                    <div class="content">
+                        <h3>What are QR Code Phishing Attacks?</h3>
+                        <p>QR code phishing (also known as "quishing") is a type of social engineering attack where cybercriminals use malicious QR codes to trick victims into revealing sensitive information or installing malware.</p>
+                        <p>When scanned, these QR codes redirect users to fake websites that mimic legitimate services, asking for login credentials, payment details, or other personal information.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="main-card educational-card">
+                    <div class="content">
+                        <h3>Common QR Code Attack Vectors</h3>
+                        <ul>
+                            <li>Physical tampering - replacing legitimate QR codes with malicious ones</li>
+                            <li>Fake advertisements with embedded malicious QR codes</li>
+                            <li>QR codes in phishing emails or messages</li>
+                            <li>Public charging stations with QR codes that lead to malware</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="main-card educational-card">
+                    <div class="content">
+                        <h3>Warning Signs of Malicious QR Codes</h3>
+                        <ul>
+                            <li>QR codes that redirect to shortened URLs or suspicious domains</li>
+                            <li>Codes that prompt immediate app downloads</li>
+                            <li>QR codes that ask for personal information on unsecured websites</li>
+                            <li>Stickers placed over original QR codes in public places</li>
+                            <li>Unexpected requests for authentication after scanning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="main-card educational-card">
+                    <div class="content">
+                        <h3>Best Practices for QR Code Safety</h3>
+                        <ul>
+                            <li>Always check the URL before providing any information</li>
+                            <li>Use a QR scanner app that previews URLs before visiting them</li>
+                            <li>Be skeptical of QR codes in unexpected places</li>
+                            <li>Never enter personal information or credentials after scanning a QR code unless you're certain of its legitimacy</li>
+                            <li>Keep your devices and apps updated to protect against vulnerabilities</li>
+                            <li>Use VigiQR to verify suspicious QR codes before scanning them with your main device</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="main-card educational-card">
+                    <div class="content">
+                        <h3>How VigiQR Protects You</h3>
+                        <p>VigiQR uses advanced algorithms to detect potential threats in QR codes:</p>
+                        <ol>
+                            <li><strong>URL Analysis</strong> - Checks for shortened URLs, suspicious domains, and known phishing patterns</li>
+                            <li><strong>Reachability Testing</strong> - Verifies if the destination is accessible or blocked by security services</li>
+                            <li><strong>Pattern Recognition</strong> - Identifies common phishing techniques used in QR code scams</li>
+                            <li><strong>Security Assessment</strong> - Provides an overall evaluation of the QR code's safety</li>
+                        </ol>
+                        <p>By using VigiQR before scanning unknown QR codes with your primary device, you add an important layer of protection against potential threats.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

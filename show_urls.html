@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scanned URLs</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .status-safe {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-unsafe {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Scanned QR URLs</h1>
+
+        {% if urls %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Original URL</th>
+                        <th>Hash</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for url in urls %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ url.original_url }}</td>
+                            <td>{{ url.hash }}</td>
+                            <td>
+                                {% if url.is_safe %}
+                                    <span class="status-safe">Safe</span>
+                                {% else %}
+                                    <span class="status-unsafe">Phishing</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No URLs have been scanned yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

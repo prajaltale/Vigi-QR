@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VigiQR - Quishing detection</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #818CF8;
+            --background-dark: #0F172A;
+            --card-bg: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --success-color: #22C55E;
+            --danger-color: #EF4444;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--background-dark), var(--card-bg));
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            animation: gradientShift 10s ease infinite;
+            background-size: 400% 400%;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            padding-top: 4rem;
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(79, 70, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(79, 70, 229, 0.2), transparent 60%);
+            animation: rotateGlow 10s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            text-align: center;
+            animation: shimmer 4s linear infinite;
+            background-size: 200% auto;
+            -webkit-text-fill-color: whitesmoke;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: fadeInUp 2s forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--secondary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 10px 20px rgba(79, 70, 229, 0.5);
+        }
+
+        .result-section {
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #1e3a8a, #1e293b);
+            border-radius: 20px;
+            padding: 2rem;
+            color: #f1f5f9;
+        }
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 220px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .badge-icon {
+            font-size: 1.1rem;
+            margin-right: 0.4rem;
+        }
+
+        .suspicious-list {
+            margin-top: 1rem;
+        }
+
+        .suspicious-list ul {
+            padding-left: 1.5rem;
+        }
+
+        .text-safe {
+            color: var(--success-color);
+        }
+
+        .text-malicious {
+            color: var(--danger-color);
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">VigiQR</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('education') }}">Educational Tips</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Container -->
+<div class="container">
+    <div class="main-card">
+        <div class="content">
+            <h1>Vigi QR</h1>
+            <p class="subtitle">Protect Yourself From Malicious QR Codes</p>
+
+            <div class="upload-section">
+                <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" class="form-control" required accept="image/*">
+                    <button type="submit" class="btn btn-primary mt-2">Scan QR Code</button>
+                </form>
+            </div>
+
+            {% if result %}
+            <div class="result-section mt-5">
+                {% if result.error %}
+                    <div class="alert alert-danger text-center">{{ result.error }}</div>
+                {% else %}
+                    {% if qr_image %}
+                        <div class="text-center mb-3">
+                            <img src="{{ qr_image }}" alt="QR Code" class="img-thumbnail shadow" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+
+                    <h4 class="mb-3"><i class="bi bi-shield-check"></i> QR Scan Summary</h4>
+
+                    <div class="info-row">
+                        <div class="info-item">
+                            <strong>Status</strong><br>
+                            {% if result.is_phishing %}
+                                <span class="badge bg-danger"><i class="bi bi-exclamation-octagon badge-icon"></i>Malicious</span>
+                            {% else %}
+                                <span class="badge bg-success"><i class="bi bi-shield-check badge-icon"></i>Safe</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <strong>Reachability</strong><br>
+                            {% if result.is_phishing %}
+                                <span class="badge bg-secondary"><i class="bi bi-wifi-off badge-icon"></i>Not Reachable</span>
+                            {% else %}
+                                <span class="badge bg-success"><i class="bi bi-wifi badge-icon"></i>Reachable</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <strong>URL</strong><br>
+                            {% if not result.is_phishing %}
+                                <a href="{{ result.url }}" target="_blank" class="text-info text-decoration-underline">{{ result.url }}</a>
+                            {% else %}
+                                <span class="text-white">{{ result.url }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <p class="fst-italic text-muted">
+                        {% if result.already_exists %}
+                            This QR was already scanned and found in the database.
+                        {% else %}
+                            This QR was newly scanned and analyzed.
+                        {% endif %}
+                    </p>
+
+                    <div class="suspicious-list">
+                        {% if result.suspicious_reasons %}
+                            <p><strong>Suspicious Patterns:</strong> <span class="text-malicious">Detected</span></p>
+                            <ul>
+                                {% for reason in result.suspicious_reasons %}
+                                    <li>{{ reason }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p><strong>Suspicious Patterns:</strong> <span class="text-safe">None</span></p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
